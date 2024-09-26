@@ -4,6 +4,7 @@ from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, Callb
 import asyncio
 import random
 import sqlite3
+import json
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -35,108 +36,8 @@ def get_title(rating):
     else:
         return 'Novice'
 
-questions_list = [
-    {
-        'question': 'What is the derivative of sin(x)?',
-        'options': ['cos(x)', '-sin(x)', '-cos(x)', 'tan(x)'],
-        'answer': 'cos(x)'
-    },
-    {
-        'question': 'What is the integral of 1/x dx?',
-        'options': ['x', 'ln(x)', 'e^x', 'x²/2'],
-        'answer': 'ln(x)'
-    },
-    {
-        'question': 'What is the value of the mathematical constant e approximately?',
-        'options': ['2.71', '3.14', '1.62', '0.577'],
-        'answer': '2.71'
-    },
-    {
-        'question': 'Solve for x: 2x² - 8x + 6 = 0',
-        'options': ['x = 1 or x = 3', 'x = -1 or x = 3', 'x = 2 or x = 1', 'x = 1 or x = 2'],
-        'answer': 'x = 1 or x = 3'
-    },
-    {
-        'question': 'What is the limit of (1 + 1/n)^n as n approaches infinity?',
-        'options': ['1', '2', 'e', '∞'],
-        'answer': 'e'
-    },
-    {
-        'question': 'If f(x) = x² + 3x + 5, what is f\'(x)?',
-        'options': ['2x + 3', 'x² + 3', '2x', 'x + 3'],
-        'answer': '2x + 3'
-    },
-    {
-        'question': 'What is the solution to the differential equation dy/dx = y?',
-        'options': ['y = x²', 'y = ln(x)', 'y = e^x', 'y = Ce^x'],
-        'answer': 'y = Ce^x'
-    },
-    {
-        'question': 'What is the sum of the infinite geometric series 1 + 1/2 + 1/4 + 1/8 + ... ?',
-        'options': ['1', '2', '3', '4'],
-        'answer': '2'
-    },
-    {
-        'question': 'What is the determinant of the matrix [[1, 2], [3, 4]]?',
-        'options': ['-2', '0', '2', '10'],
-        'answer': '-2'
-    },
-    {
-        'question': 'What is the area under the curve y = x² from x = 0 to x = 1?',
-        'options': ['1', '1/3', '1/2', '1/4'],
-        'answer': '1/3'
-    },
-    {
-        'question': 'Solve for x: log(x) = 3',
-        'options': ['x = 100', 'x = 1000', 'x = 3', 'x = 10'],
-        'answer': 'x = 1000'
-    },
-    {
-        'question': 'What is the value of the Riemann zeta function ζ(2)?',
-        'options': ['π²/6', 'π²', 'π/6', 'π³/6'],
-        'answer': 'π²/6'
-    },
-    {
-        'question': 'What is the sum of the first 100 positive integers?',
-        'options': ['5050', '5000', '1000', '50500'],
-        'answer': '5050'
-    },
-    {
-        'question': 'What is the factorial of 6?',
-        'options': ['720', '120', '5040', '360'],
-        'answer': '720'
-    },
-    {
-        'question': 'If the radius of a circle is doubled, how does the area change?',
-        'options': ['Doubles', 'Quadruples', 'Triples', 'Stays the same'],
-        'answer': 'Quadruples'
-    },
-    {
-        'question': 'What is the value of cos(π/3)?',
-        'options': ['1/2', '√3/2', '0', '-1'],
-        'answer': '1/2'
-    },
-    {
-        'question': 'What is the inverse function of f(x) = 2x + 3?',
-        'options': ['f⁻¹(x) = (x - 3)/2', 'f⁻¹(x) = (x + 3)/2', 'f⁻¹(x) = 2/(x + 3)', 'f⁻¹(x) = 2x - 3'],
-        'answer': 'f⁻¹(x) = (x - 3)/2'
-    },
-    {
-        'question': 'Solve for x: e^x = 5',
-        'options': ['x = ln(5)', 'x = 5', 'x = e', 'x = e/5'],
-        'answer': 'x = ln(5)'
-    },
-    {
-        'question': 'What is the derivative of x³?',
-        'options': ['3x²', '3x', 'x²', '2x²'],
-        'answer': '3x²'
-    },
-    {
-        'question': 'What is the solution to the equation x² - 4 = 0?',
-        'options': ['x = 2', 'x = -2', 'x = 2 or -2', 'x = 4'],
-        'answer': 'x = 2 or -2'
-    }
-]
+with open('questions_list.json', 'r', encoding='utf-8') as file:
+    questions_list = json.load(file)
 
 
 waiting_users = []
